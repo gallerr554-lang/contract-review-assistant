@@ -2,6 +2,22 @@
 
 Vue 3 + FastAPI + PostgreSQL 的合同审查工作台。当前版本已完成用户权限与管理员用户管理、配置驱动的合同审查闭环、审查记录与风险反馈，以及管理员维护的全局模型配置能力。
 
+## 系统演示
+- 工作台页面：
+<img width="2772" height="1722" alt="image" src="https://github.com/user-attachments/assets/5440e73b-d81c-4260-be73-9d27a4cad2d1" />
+<img width="2760" height="1716" alt="image" src="https://github.com/user-attachments/assets/cf6e4e7c-9c87-4a6e-ad8a-8bc562b96daa" />
+<img width="2776" height="1724" alt="image" src="https://github.com/user-attachments/assets/6b283f35-07ee-4602-9b78-5c4e78ecd71c" />
+<img width="2774" height="1712" alt="image" src="https://github.com/user-attachments/assets/9893fc12-a979-4237-bb23-ba715b03148b" />
+
+- 审查配置页面：
+<img width="2774" height="1724" alt="image" src="https://github.com/user-attachments/assets/8ee4ee12-19ea-4bde-80ba-7e4fc032d9e9" />
+<img width="2784" height="1728" alt="image" src="https://github.com/user-attachments/assets/728ca6dc-3faf-4207-91cb-f9a73250dc12" />
+
+- 系统配置页面：
+<img width="2780" height="1726" alt="image" src="https://github.com/user-attachments/assets/f0d50db0-d147-49d9-a42b-d39218a432b8" />
+<img width="2764" height="1728" alt="image" src="https://github.com/user-attachments/assets/d5b5d4b3-b73d-470c-907a-966ecf31c3db" />
+
+
 ## 已实现
 
 - 上传 1 份主合同和最多 3 份附件，校验格式、数量、大小和空内容；
