@@ -26,6 +26,10 @@ postgres-data/
 !.env.example
 *.pem
 *.key
+*.p12
+*.pfx
+.aws/
+.ssh/
 
 # Python
 __pycache__/
@@ -43,6 +47,8 @@ build/
 storage/
 backups/
 *.sqlite3
+*.sqlite
+*.db
 *.sql
 *.dump
 *.bak
