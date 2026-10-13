@@ -1,0 +1,91 @@
+name: ${COMPOSE_PROJECT_NAME:-contract-review}
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:?Set POSTGRES_DB in .env}
+      POSTGRES_USER: ${POSTGRES_USER:?Set POSTGRES_USER in .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    ports:
+      - "${POSTGRES_BIND_ADDRESS:-127.0.0.1}:${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\""]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 5s
+
+  backend:
+    build:
+      context: ./backend
+    restart: unless-stopped
+    init: true
+    environment:
+      APP_NAME: ${APP_NAME:-contract-review-assistant}
+      APP_ENV: ${APP_ENV:-docker}
+      APP_DEBUG: "false"
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: "5432"
+      POSTGRES_DB: ${POSTGRES_DB:?Set POSTGRES_DB in .env}
+      POSTGRES_USER: ${POSTGRES_USER:?Set POSTGRES_USER in .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:8080,http://127.0.0.1:8080}
+      STORAGE_ROOT: /app/storage
+      MAX_FILE_SIZE_MB: ${MAX_FILE_SIZE_MB:-20}
+      MAX_REVIEW_CHARACTERS: ${MAX_REVIEW_CHARACTERS:-120000}
+      DOCUMENT_PAGE_CHARACTERS: ${DOCUMENT_PAGE_CHARACTERS:-3000}
+      OCR_MIN_PAGE_CHARACTERS: ${OCR_MIN_PAGE_CHARACTERS:-30}
+      OCR_LANGUAGE: ${OCR_LANGUAGE:-chi_sim+eng}
+      OCR_TIMEOUT_SECONDS: ${OCR_TIMEOUT_SECONDS:-90}
+      AUTH_SESSION_HOURS: ${AUTH_SESSION_HOURS:-24}
+      CAPTCHA_EXPIRE_MINUTES: ${CAPTCHA_EXPIRE_MINUTES:-5}
+      INITIAL_ADMIN_EMAIL: ${INITIAL_ADMIN_EMAIL:-}
+      INITIAL_ADMIN_PASSWORD: ${INITIAL_ADMIN_PASSWORD:-}
+      MODEL_PROVIDER: ${MODEL_PROVIDER:-deepseek}
+      MODEL_NAME: ${MODEL_NAME:-deepseek-chat}
+      MODEL_API_BASE: ${MODEL_API_BASE:-https://api.deepseek.com}
+      MODEL_API_KEY: ${MODEL_API_KEY:-}
+      MODEL_CONFIG_ENCRYPTION_KEY: ${MODEL_CONFIG_ENCRYPTION_KEY:?Set MODEL_CONFIG_ENCRYPTION_KEY in .env}
+      MODEL_TEMPERATURE: ${MODEL_TEMPERATURE:-0.2}
+      MODEL_MAX_TOKENS: ${MODEL_MAX_TOKENS:-4096}
+      MODEL_REQUEST_TIMEOUT_SECONDS: ${MODEL_REQUEST_TIMEOUT_SECONDS:-300}
+    ports:
+      - "${BACKEND_BIND_ADDRESS:-127.0.0.1}:${BACKEND_PORT:-8000}:8000"
+    volumes:
+      - ./storage:/app/storage
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health/db', timeout=5)
+      interval: 10s
+      timeout: 6s
+      retries: 12
+      start_period: 20s
+
+  frontend:
+    build:
+      context: ./frontend
+    restart: unless-stopped
+    ports:
+      - "${FRONTEND_BIND_ADDRESS:-0.0.0.0}:${FRONTEND_PORT:-8080}:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1/healthz"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 5s
+
+volumes:
+  postgres-data:

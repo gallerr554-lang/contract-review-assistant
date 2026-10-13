@@ -1,0 +1,52 @@
+.DS_Store
+.env
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+node_modules/
+dist/
+coverage/
+
+storage/contracts/*
+storage/attachments/*
+storage/results/*
+!storage/contracts/.gitkeep
+!storage/attachments/.gitkeep
+!storage/results/.gitkeep
+
+postgres-data/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# Vue / Node
+node_modules/
+dist/
+build/
+
+# Runtime and databases
+storage/
+backups/
+*.sqlite3
+*.sql
+*.dump
+*.bak
+*.log
+
+# macOS
+.DS_Store

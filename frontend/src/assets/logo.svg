@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-labelledby="title">
+  <title id="title">合审通</title>
+  <rect width="48" height="48" rx="10" fill="#0f766e"/>
+  <path d="M15 10.5h13l6 6V36a2.5 2.5 0 0 1-2.5 2.5h-16A2.5 2.5 0 0 1 13 36V13a2.5 2.5 0 0 1 2-2.45Z" fill="#fff"/>
+  <path d="M28 10.5v6h6" fill="none" stroke="#99f6e4" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M18 22h11M18 27h7" fill="none" stroke="#0f766e" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="m20 33 2.2 2.2 5-5" fill="none" stroke="#d97706" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
